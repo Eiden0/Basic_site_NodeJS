@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Eiden0/Basic_site_NodeJS/issues"
   },
-  "homepage": "https://github.com/Eiden0/Basic_site_NodeJS#readme"
+  "homepage": "https://github.com/Eiden0/Basic_site_NodeJS#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

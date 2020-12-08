@@ -1,18 +1,29 @@
-const http = require('http');
-const url = require('url');
-const fs = require('fs');
+const path = require('path')
+const express = require('express');
 
-http.createServer(function (req, res) {
-    const q = url.parse(req.url, true);
-    const filename = q.pathname === "/" ? `./index.html` : `.${q.pathname}.html`
+const app = express();
+const PORT = 8080;
 
-    fs.readFile(filename, function (err, data){
-        if (err) {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            return res.end(`<h1>Error: 404</h1><p>The page you are looking for doesn't exist.</p> <a href="/">Back home.</a>`);
-        }
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    })
-}).listen(8080);
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, "index.html"));
+})
+
+app.get('/contact-me', (req, res) => {
+  res.sendFile(path.resolve(__dirname, "contact-me.html"));
+})
+
+app.get('/about', (req, res) => {
+  res.sendFile(path.resolve(__dirname, "about.html"));
+})
+
+app.use(function (req, res, next){
+        const error = new Error("Not Found");
+        error.status = 404;
+        throw error;
+});
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).sendFile(path.resolve(__dirname, "404.html"));
+})
+
+app.listen(PORT, () => console.log('The server has been published'));
